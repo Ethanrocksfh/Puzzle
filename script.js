@@ -466,65 +466,92 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-function init() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: false });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(1);
-    document.body.appendChild(renderer.domElement);
-
-    camera.position.set(0, 7, 5);
-    camera.lookAt(0, 0, 0);
-
-    const ambientLight = new THREE.AmbientLight(0x808080);
-    scene.add(ambientLight);
-
-    const floorGeometry = new THREE.PlaneGeometry(gridSize, gridSize);
-    const floorMaterial = new THREE.MeshBasicMaterial({ 
-        map: createPixelatedTexture('#555555'),
-        side: THREE.DoubleSide
-    });
-    floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.rotation.x = -Math.PI / 2;
-    scene.add(floor);
-
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x333333 });
-    for (let i = -gridSize / 2; i <= gridSize / 2; i++) {
-        const pointsX = [];
-        pointsX.push(new THREE.Vector3(i, 0.01, -gridSize / 2));
-        pointsX.push(new THREE.Vector3(i, 0.01, gridSize / 2));
-        const geometryX = new THREE.BufferGeometry().setFromPoints(pointsX);
-        const lineX = new THREE.Line(geometryX, lineMaterial);
-        scene.add(lineX);
-
-        const pointsZ = [];
-        pointsZ.push(new THREE.Vector3(-gridSize / 2, 0.01, i));
-        pointsZ.push(new THREE.Vector3(gridSize / 2, 0.01, i));
-        const geometryZ = new THREE.BufferGeometry().setFromPoints(pointsZ);
-        const lineZ = new THREE.Line(geometryZ, lineMaterial);
-        scene.add(lineZ);
-    }
-
-    loadLevel(currentLevel);
-    initTouchControls();
-    console.log(`Level ${currentLevel} loaded - Blocks: ${levels[currentLevel-1].blockPositions.length}, Walls: ${levels[currentLevel-1].wallPositions.length}`);
-
-    window.addEventListener('keydown', onKeyDown);
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
+function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
     loadingScreen.classList.add('hidden');
- setTimeout(() => {
+    setTimeout(() => {
         loadingScreen.style.display = 'none';
     }, 500);
+}
 
-    animate();
+function init() {
+    console.log('Initializing game...');
+
+    // Check if Three.js is available
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js is not loaded. Cannot initialize game.');
+        alert('Error: Three.js failed to load. Please check your internet connection or try again later.');
+        hideLoadingScreen();
+        return;
+    }
+
+    try {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ antialias: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(1);
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.set(0, 7, 5);
+        camera.lookAt(0, 0, 0);
+
+        const ambientLight = new THREE.AmbientLight(0x808080);
+        scene.add(ambientLight);
+
+        const floorGeometry = new THREE.PlaneGeometry(gridSize, gridSize);
+        const floorMaterial = new THREE.MeshBasicMaterial({ 
+            map: createPixelatedTexture('#555555'),
+            side: THREE.DoubleSide
+        });
+        floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        scene.add(floor);
+
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x333333 });
+        for (let i = -gridSize / 2; i <= gridSize / 2; i++) {
+            const pointsX = [];
+            pointsX.push(new THREE.Vector3(i, 0.01, -gridSize / 2));
+            pointsX.push(new THREE.Vector3(i, 0.01, gridSize / 2));
+            const geometryX = new THREE.BufferGeometry().setFromPoints(pointsX);
+            const lineX = new THREE.Line(geometryX, lineMaterial);
+            scene.add(lineX);
+
+            const pointsZ = [];
+            pointsZ.push(new THREE.Vector3(-gridSize / 2, 0.01, i));
+            pointsZ.push(new THREE.Vector3(gridSize / 2, 0.01, i));
+            const geometryZ = new THREE.BufferGeometry().setFromPoints(pointsZ);
+            const lineZ = new THREE.Line(geometryZ, lineMaterial);
+            scene.add(lineZ);
+        }
+
+        loadLevel(currentLevel);
+        initTouchControls();
+        console.log(`Level ${currentLevel} loaded - Blocks: ${levels[currentLevel-1].blockPositions.length}, Walls: ${levels[currentLevel-1].wallPositions.length}`);
+
+        window.addEventListener('keydown', onKeyDown);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        hideLoadingScreen();
+        animate();
+    } catch (error) {
+        console.error('Error during initialization:', error);
+        alert('Error: Game failed to initialize. Please check the console for details.');
+        hideLoadingScreen();
+    }
+
+    // Fallback timeout to hide loading screen if initialization hangs
+    setTimeout(() => {
+        if (document.getElementById('loadingScreen').style.display !== 'none') {
+            console.warn('Initialization took too long. Forcing loading screen to hide.');
+            hideLoadingScreen();
+        }
+    }, 5000);
 }
 
 init();

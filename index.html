@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro 3D Block Push Puzzle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loadingScreen">Loading...</div>
+    <div id="ui">
+        <h3>Retro Block Push</h3>
+        <p>Level: <span id="level">1</span></p>
+        <p>Push red blocks to yellow tiles</p>
+        <p>Moves: <span id="moves">0</span></p>
+        <p id="blockPositions">Block positions: </p>
+        <button onclick="resetGame()">Reset Level</button>
+        <button onclick="undoMove()">Undo Move</button>
+        <button onclick="showLevelSelect()">Level Select</button>
+        <button id="nextLevel" onclick="loadNextLevel()">Next Level</button>
+        <p>Arrows: Move & push blocks</p>
+        <p>U: Undo move</p>
+        <p>Blue cubes: Walls</p>
+    </div>
+    <div id="animationText">More Levels Coming Soon</div>
+    <div id="continuationScreen">More Levels Coming Soon</div>
+    <div id="levelSelect">
+        <h2>Select Level</h2>
+        <button onclick="selectLevel(1)">Level 1</button>
+        <button onclick="selectLevel(2)">Level 2</button>
+        <button onclick="selectLevel(3)">Level 3</button>
+        <button onclick="selectLevel(4)">Level 4</button>
+        <button onclick="selectLevel(5)">Level 5</button>
+        <button onclick="hideLevelSelect()">Close</button>
+    </div>
+    <div id="touchControls"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

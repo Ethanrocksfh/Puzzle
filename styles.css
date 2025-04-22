@@ -1,0 +1,238 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+canvas {
+    display: block;
+    image-rendering: pixelated;
+}
+
+/* UI Styles */
+#ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    background: #000;
+    padding: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    max-width: 250px;
+    box-sizing: border-box;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+#ui:hover {
+    opacity: 1;
+}
+
+button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background: #333;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+#nextLevel {
+    display: none;
+}
+
+/* Canvas Overlay */
+canvas::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 4px
+    );
+    pointer-events: none;
+}
+
+/* Loading Screen */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 24px;
+    text-align: center;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    z-index: 1000;
+    transition: opacity 0.5s ease-out;
+}
+
+#loadingScreen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Animation Text */
+#animationText {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff0000;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 32px;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    z-index: 1001;
+    display: none;
+    animation: pulse 1s infinite alternate;
+}
+
+/* Continuation Screen */
+#continuationScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #ff0000;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 36px;
+    text-align: center;
+    text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    z-index: 1002;
+    animation: shake 0.1s infinite;
+}
+
+/* Level Selection Menu */
+#levelSelect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #000;
+    border: 4px solid #fff;
+    padding: 20px;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+    z-index: 1001;
+}
+
+#levelSelect h2 {
+    margin: 0 0 15px;
+}
+
+#levelSelect button {
+    display: block;
+    width: 100px;
+    margin: 5px auto;
+}
+
+/* Touch Controls */
+#touchControls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    z-index: 1000;
+}
+
+.touchButton {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    padding: 10px;
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.touchButton:active {
+    background: #333;
+}
+
+/* Animations */
+@keyframes pulse {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+@keyframes shake {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(2px, -2px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #ui {
+        font-size: 10px;
+        padding: 8px;
+        top: 5px;
+        left: 5px;
+    }
+
+    button {
+        font-size: 8px;
+        padding: 4px 8px;
+    }
+
+    #loadingScreen {
+        font-size: 18px;
+    }
+
+    #animationText {
+        font-size: 24px;
+    }
+
+    #continuationScreen {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    #touchControls {
+        display: flex;
+    }
+}
